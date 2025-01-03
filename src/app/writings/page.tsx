@@ -1,6 +1,5 @@
 // src/app/writings/page.tsx
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 import { format, parseISO } from 'date-fns';
 import { getAllArticles } from '@/lib/articles';
 

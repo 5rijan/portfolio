@@ -26,8 +26,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const menuItems = [
     { path: '/', label: 'home' },
     { path: '/about', label: 'about' },
-    { path: '/writings', label: 'writings' },
     { path: '/projects', label: 'projects' },
+    { path: '/writings', label: 'writings' },
     { path: '/art', label: 'art & photos' },
     { path: '/contact', label: 'contact' },
 

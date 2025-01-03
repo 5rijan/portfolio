@@ -6,11 +6,5 @@ const nextConfig: NextConfig = {
   },
 }
 
-module.exports = {
-  images: {
-    domains: ['your-domain.com'], // Add domains where your images are hosted
-    formats: ['image/jpeg', 'image/jpg'],
-  },
-}
 
 export default nextConfig;

@@ -1,6 +1,5 @@
 // src/app/writings/[...slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { format, parseISO } from 'date-fns';
 import { getArticleBySlug, getAllArticles, type ArticleMetadata } from '@/lib/articles';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Suspense } from 'react';
@@ -60,12 +59,11 @@ const components = {
   ),  
 };
 interface ArticleProps {
-  params: {
-    slug: string[];
-  };
+  params: { slug: string[] };
 }
-export default async function ArticlePage({ params }: { params: { slug: string[] } }) {
-  const { slug } = await params;
+
+export default async function ArticlePage({ params }: ArticleProps) {
+  const { slug } = params;
 
   if (!slug || !Array.isArray(slug) || slug.length === 0) {
     notFound();
@@ -82,7 +80,7 @@ export default async function ArticlePage({ params }: { params: { slug: string[]
     return (
       <div className="max-w-2xl mx-auto space-y-8 pb-20">
         {/* Back Button */}
-        <Link 
+        <Link
           href="/writings"
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
@@ -93,16 +91,7 @@ export default async function ArticlePage({ params }: { params: { slug: string[]
         {/* Article Content */}
         <Suspense fallback={<div>Loading article...</div>}>
           <article className="max-w-none">
-            <MDXRemote
-              source={article.content}
-              components={components}
-              options={{
-                parseFrontmatter: true,
-                mdxOptions: {
-                  format: 'mdx'
-                }
-              }}
-            />
+            <MDXRemote source={article.content} components={components} />
           </article>
         </Suspense>
       </div>

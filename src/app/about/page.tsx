@@ -41,7 +41,7 @@ export default function About() {
       <section className="space-y-12">
         <h2 className="text-sm font-medium">Experience</h2>
         
-        <div className="space-y-12">
+        <div className="space-y-8">
           <div className="space-y-2">
             <div className="flex justify-between items-baseline">
               <h3 className="text-sm">Research Project Assistant</h3>
@@ -98,28 +98,33 @@ export default function About() {
       <section className="space-y-8">
         <h2 className="text-sm font-medium">Skills</h2>
         
-        <div className="flex flex-wrap gap-y-8">
-          <div className="w-full md:w-1/3 space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-2">
             <h3 className="text-xs text-muted-foreground">Languages</h3>
-            <p className="text-sm">Python, JavaScript, Java, TypeScript</p>
+            <p className="text-sm">Python, JavaScript, Java, TypeScript, Assembly AVR</p>
           </div>
           
-          <div className="w-full md:w-1/3 space-y-2">
+          <div className="space-y-2">
             <h3 className="text-xs text-muted-foreground">Frontend</h3>
-            <p className="text-sm">React, Next.js, Tailwind CSS</p>
+            <p className="text-sm">React, Next.js, Vue.js, Chart.js, Tailwind CSS</p>
           </div>
           
-          <div className="w-full md:w-1/3 space-y-2">
+          <div className="space-y-2">
             <h3 className="text-xs text-muted-foreground">Backend</h3>
-            <p className="text-sm">Flask, Django, Postgresql, Sqlite</p>
+            <p className="text-sm">Flask, Django, SQLite, Socket.IO, PostgreSQL, OAuth, Stripe</p>
           </div>
           
-          <div className="w-full md:w-1/3 space-y-2">
+          <div className="space-y-2">
             <h3 className="text-xs text-muted-foreground">Tools</h3>
-            <p className="text-sm">Git, Docker</p>
+            <p className="text-sm">Git, Docker, Streamlit, Nougat</p>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-xs text-muted-foreground">Libraries</h3>
+            <p className="text-sm">Jupyter, Pandas, NumPy, TensorFlow, Matplotlib, Seaborn, R</p>
           </div>
           
-          <div className="w-full md:w-1/3 space-y-2">
+          <div className="space-y-2">
             <h3 className="text-xs text-muted-foreground">Currently Learning</h3>
             <p className="text-sm">C Programming</p>
           </div>

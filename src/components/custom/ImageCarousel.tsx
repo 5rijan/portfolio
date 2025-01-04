@@ -13,6 +13,7 @@ interface ImageCarouselProps {
 
 const ImageCarousel = ({ images, title }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [loadedImages, setLoadedImages] = React.useState<Set<number>>(new Set());
   const [imageAspectRatio, setImageAspectRatio] = React.useState(16/10);
 
   const next = () => {
@@ -27,6 +28,7 @@ const ImageCarousel = ({ images, title }: ImageCarouselProps) => {
     );
   };
 
+  // Keyboard navigation
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') previous();
@@ -37,14 +39,19 @@ const ImageCarousel = ({ images, title }: ImageCarouselProps) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Pre-load images and calculate proper dimensions
+  // Preload all images when component mounts
   React.useEffect(() => {
-    const img = new window.Image();
-    img.src = images[currentIndex];
-    img.onload = () => {
-      setImageAspectRatio(img.naturalWidth / img.naturalHeight);
-    };
-  }, [currentIndex, images]);
+    images.forEach((src, index) => {
+      const img = new window.Image();
+      img.src = src;
+      img.onload = () => {
+        if (index === currentIndex) {
+          setImageAspectRatio(img.naturalWidth / img.naturalHeight);
+        }
+        setLoadedImages(prev => new Set([...prev, index]));
+      };
+    });
+  }, [images]);
 
   return (
     <Card className="relative group overflow-hidden rounded-xl w-full">
@@ -52,14 +59,26 @@ const ImageCarousel = ({ images, title }: ImageCarouselProps) => {
         className="relative w-full overflow-hidden"
         style={{ paddingBottom: `${(1 / imageAspectRatio) * 100}%` }}
       >
-        <Image
-          src={images[currentIndex]}
-          alt={`${title} - Image ${currentIndex + 1}`}
-          fill
-          className="object-contain"
-          priority
-          quality={100}
-        />
+        {/* Preload all images but only show current one */}
+        {images.map((src, index) => (
+          <div key={src} className={index === currentIndex ? 'block' : 'hidden'}>
+            <Image
+              src={src}
+              alt={`${title} - Image ${index + 1}`}
+              fill
+              className="object-contain"
+              priority={index === 0} // Only first image needs priority
+              quality={100}
+            />
+          </div>
+        ))}
+        
+        {/* Loading indicator */}
+        {!loadedImages.has(currentIndex) && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+            <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+          </div>
+        )}
         
         {/* Navigation arrows */}
         {images.length > 1 && (

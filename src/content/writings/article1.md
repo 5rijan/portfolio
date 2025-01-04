@@ -128,5 +128,3 @@ Always test your website's accessibility using tools and manual checks:
 ---
 
 By adopting these practices, you can build websites that are more inclusive and provide a superior experience for all users. Accessibility is not a feature—it’s a necessity.
-
-**What accessibility challenges have you faced? Share your insights in the comments below!**

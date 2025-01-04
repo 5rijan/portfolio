@@ -44,7 +44,7 @@ export default async function ProjectsPage() {
                     title={project.title}
                   />
                   
-                  <div className="mt-8 space-y-6">
+                  <div className="mt-8 space-y-4">
                     <div className="flex items-baseline justify-between">
                       <h3 className="text-l font-medium group-hover:text-primary transition-colors">
                         {project.title}
@@ -58,7 +58,7 @@ export default async function ProjectsPage() {
                       {project.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-3 text-xs text-muted-foreground/60">
+                    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground/60">
                       {project.tags.map((tag, tagIndex) => (
                         <span key={tagIndex} className="hover:text-muted-foreground transition-colors">
                           #{tag}
@@ -66,7 +66,7 @@ export default async function ProjectsPage() {
                       ))}
                     </div>
 
-                    <div className="flex gap-6 text-xs">
+                    <div className="flex gap-4 text-xs">
                       <Link 
                         href={project.projectUrl} 
                         className="flex items-center text-muted-foreground hover:text-foreground transition-colors"

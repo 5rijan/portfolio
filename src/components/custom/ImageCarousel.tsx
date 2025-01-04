@@ -13,8 +13,35 @@ interface ImageCarouselProps {
 
 const ImageCarousel = ({ images, title }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
-  const [loadedImages, setLoadedImages] = React.useState<Set<number>>(new Set());
+  const [isLoading, setIsLoading] = React.useState(true);
   const [imageAspectRatio, setImageAspectRatio] = React.useState(16/10);
+
+  // Load all images before showing the carousel
+  React.useEffect(() => {
+    let loadedCount = 0;
+    const totalImages = images.length;
+
+    // Create a promise for each image load
+    const loadPromises = images.map((src, index) => {
+      return new Promise((resolve, reject) => {
+        const img = new window.Image();
+        img.src = src;
+        img.onload = () => {
+          loadedCount++;
+          if (index === 0) {
+            setImageAspectRatio(img.naturalWidth / img.naturalHeight);
+          }
+          resolve(null);
+        };
+        img.onerror = reject;
+      });
+    });
+
+    // Wait for all images to load
+    Promise.all(loadPromises)
+      .then(() => setIsLoading(false))
+      .catch(error => console.error('Error loading images:', error));
+  }, [images]);
 
   const next = () => {
     setCurrentIndex((current) => 
@@ -28,7 +55,6 @@ const ImageCarousel = ({ images, title }: ImageCarouselProps) => {
     );
   };
 
-  // Keyboard navigation
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') previous();
@@ -39,19 +65,21 @@ const ImageCarousel = ({ images, title }: ImageCarouselProps) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Preload all images when component mounts
-  React.useEffect(() => {
-    images.forEach((src, index) => {
-      const img = new window.Image();
-      img.src = src;
-      img.onload = () => {
-        if (index === currentIndex) {
-          setImageAspectRatio(img.naturalWidth / img.naturalHeight);
-        }
-        setLoadedImages(prev => new Set([...prev, index]));
-      };
-    });
-  }, [images]);
+  // Show loading state while images are being loaded
+  if (isLoading) {
+    return (
+      <Card className="relative overflow-hidden rounded-xl w-full">
+        <div 
+          className="relative w-full bg-gray-100"
+          style={{ paddingBottom: '62.5%' }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 border-3 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="relative group overflow-hidden rounded-xl w-full">
@@ -59,26 +87,23 @@ const ImageCarousel = ({ images, title }: ImageCarouselProps) => {
         className="relative w-full overflow-hidden"
         style={{ paddingBottom: `${(1 / imageAspectRatio) * 100}%` }}
       >
-        {/* Preload all images but only show current one */}
         {images.map((src, index) => (
-          <div key={src} className={index === currentIndex ? 'block' : 'hidden'}>
+          <div 
+            key={src}
+            className={`absolute inset-0 transition-opacity duration-300 ${
+              index === currentIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
             <Image
               src={src}
               alt={`${title} - Image ${index + 1}`}
               fill
               className="object-contain"
-              priority={index === 0} // Only first image needs priority
+              priority={true}
               quality={100}
             />
           </div>
         ))}
-        
-        {/* Loading indicator */}
-        {!loadedImages.has(currentIndex) && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-            <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-          </div>
-        )}
         
         {/* Navigation arrows */}
         {images.length > 1 && (

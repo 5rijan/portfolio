@@ -90,7 +90,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
       <footer className="py-6 flex justify-between items-center">
         <Link href="/" className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors">
-          chsrijan
+        सृजन.चौधरी
         </Link>
         <div className="flex items-center gap-4">
           <ThemeToggle />
